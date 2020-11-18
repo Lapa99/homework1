@@ -1,0 +1,52 @@
+import java.util.Random;
+
+public class Main {
+    public static void main(String[] args) {
+        Cat cat = new Cat(200, 2);
+        Dog dog = new Dog(500, 10, 0.5f);
+        System.out.println("Кот:");
+        cat.run(234);
+        cat.run(400);
+        cat.swim(110);
+        cat.jump(2);
+        cat.jump(3);
+        System.out.println("Собака:");
+        dog.run(222);
+        dog.run(476);
+        dog.swim(140);
+        dog.jump(4);
+        dog.jump(3);
+        Animal newCat = createCat();
+        Animal newDog = createDog();
+        System.out.println("Второй кот:");
+        System.out.println("Не умеет плавать. Макс. бег: " + newCat.maxRunLenght + " и макс. прыжок: " + newCat.maxJumpHieght);
+        newCat.run(200);
+        newCat.run(250);
+        newCat.swim(100);
+        newCat.jump(1);
+        newCat.jump(3);
+        System.out.println("Вторая собака:");
+        System.out.println("Макс. плав.: " + newDog.maxSwimLenght +", макс. бег: " + newDog.maxRunLenght + " макс. прыжок: " + newDog.maxJumpHieght);
+        newDog.run(429);
+        newDog.run(500);
+        newDog.swim(8);
+        newDog.swim(123);
+        newDog.jump(0.8f);
+        newDog.jump(0.2f);
+    }
+    static Animal createCat() {
+        Random random = new Random();
+        float maxJump = random.nextInt(10) + random.nextFloat();
+        float maxRun = random.nextInt(200) + random.nextFloat();
+        Cat cat = new Cat(maxRun, maxJump);
+        return cat;
+    }
+    static Animal createDog() {
+        Random random = new Random();
+        float maxJump = random.nextInt(10) + random.nextFloat();
+        float maxRun = random.nextInt(200) + random.nextFloat();
+        float maxSwim = random.nextInt(50) + random.nextFloat();
+        Dog dog = new Dog(maxRun, maxSwim, maxJump);
+        return dog;
+    }
+}
