@@ -1,0 +1,295 @@
+package obstacles;
+
+import participants.Animal;
+import participants.Participant;
+import participants.Team;
+
+public class Course {
+    private Obstacle[] obstacles;
+    public Course(Obstacle... obstacles) {
+        this.obstacles = obstacles;
+    }
+    public void doIt(Team team) {
+        for (Participant p : team.getParticipants()) {
+            for (Obstacle o : obstacles) {
+                o.doIt(p);
+                if (!p.isOnDistance()) {
+                    break;
+                }
+            }
+        }
+    }
+}
+package obstacles;
+
+import participants.*;
+
+public class Cross extends Obstacle {
+    private int lenght;
+
+    public Cross(int lenght) {
+        this.lenght = lenght;
+    }
+
+    @Override
+    public void doIt(Participant p) {
+        if (p instanceof Walkable) {
+            ((Walkable) p).run(lenght);
+        } else {
+            System.out.println(p + " - Can't run");
+            p.setOnDistance(false);
+        }
+    }
+}
+package obstacles;
+
+import participants.Animal;
+import participants.Participant;
+
+public abstract class Obstacle {
+    public abstract void doIt(Participant p);
+}
+package obstacles;
+
+import participants.Animal;
+import participants.Jumpable;
+import participants.Participant;
+
+public class Wall extends Obstacle {
+    private int height;
+
+    public Wall(int height) {
+        this.height = height;
+    }
+
+    @Override
+    public void doIt(Participant p) {
+        if (p instanceof Jumpable) {
+            ((Jumpable) p).jump(height);
+        } else {
+            System.out.println(p + " - Can't jump");
+            p.setOnDistance(false);
+        }
+    }
+}
+package obstacles;
+
+import participants.Animal;
+import participants.Jumpable;
+import participants.Participant;
+import participants.Swimable;
+
+public class Water extends Obstacle {
+    private int length;
+
+    public Water(int length) {
+        this.length = length;
+    }
+
+    @Override
+    public void doIt(Participant p) {
+        if (p instanceof Swimable) {
+            ((Swimable) p).swim(length);
+        } else {
+            System.out.println(p + " - Can't swim");
+            p.setOnDistance(false);
+        }
+    }
+}
+package participants;
+
+public abstract class Animal implements Participant, Jumpable, Walkable  {
+    protected String type;
+    protected String name;
+    protected String color;
+    protected int maxRunDistance;
+    protected int maxJumpHeight;
+    protected boolean onDistance;
+    public Animal(String type, String name, String color, int maxRunDistance, int maxJumpHeight) {
+        this.type = type;
+        this.name = name;
+        this.color = color;
+        this.maxRunDistance = maxRunDistance;
+        this.maxJumpHeight = maxJumpHeight;
+        this.onDistance = true;
+    }
+    public boolean isOnDistance() {
+        return onDistance;
+    }
+
+    public void setOnDistance(boolean onDistance) {
+        this.onDistance = onDistance;
+    }
+
+    @Override
+    public void run(int distance) {
+        if (distance <= maxRunDistance) {
+            System.out.println(this + " - run OK");
+        } else {
+            System.out.println(this + " - run FAILED");
+            onDistance = false;
+        }
+    }
+    @Override
+    public void jump(int height) {
+        if (height <= maxJumpHeight) {
+            System.out.println(this + " - Jump OK");
+        } else {
+            System.out.println(this + " - Jump FAILED");
+            onDistance = false;
+        }
+    }
+    @Override
+    public String toString() { return  color + " " + type + " " + name; }
+
+}
+package participants;
+
+public class Cat extends Animal {
+    public Cat(String name, String color) {
+        super("Cat", name, color, 500, 100);
+    }
+}
+package participants;
+
+public enum Color {
+    BLACK("Black", "Черный"),
+    GREY("Grey", "Серый"),
+    WHITE("White", "Белый"),
+    RED("Orange", "Рыжий");
+
+    private String englishColorName;
+    private String russianColorName;
+
+    Color(String englishColorName, String russianColorName) {
+        this.englishColorName = englishColorName;
+        this.russianColorName = russianColorName;
+    }
+
+    public String getEnglishColorName() {
+        return englishColorName;
+    }
+
+    public String getRussianColorName() {
+        return russianColorName;
+    }
+}
+package participants;
+
+public class Dog extends Animal implements Swimable {
+    int maxSwimDistance;
+    public Dog(String name, String color) {
+        super("Cat", name, color, 1000, 50);
+        maxSwimDistance = 10;
+    }
+
+    @Override
+    public void swim(int distance) {
+        if (distance <= maxSwimDistance) {
+            System.out.println(this + " - swim OK");
+        } else {
+            System.out.println(this + " - swim FAILED");
+            setOnDistance(false);
+        }
+    }
+}
+package participants;
+
+public class Duck extends Animal implements Swimable {
+
+    private int maxSwimDistance;
+
+    public Duck(String name, String color) {
+        super("Duck", name, color, 100, 50);
+        maxSwimDistance = 50;
+    }
+
+    @Override
+    public void swim(int distance) {
+        if (distance <= maxSwimDistance) {
+            System.out.println(color + " " + type + " " + name + " - swim OK");
+        } else {
+            System.out.println(color + " " + type + " " + name + " - swim FAILED");
+            onDistance = false;
+        }
+    }
+}
+package participants;
+
+public interface Jumpable {
+    void jump(int height);
+}
+package participants;
+
+public interface Participant {
+    boolean isOnDistance();
+    void setOnDistance(boolean onDistance);
+}
+package participants;
+
+public class Robot implements Participant, Walkable, Swimable {
+    private String model;
+    private String color;
+    private int maxSwimDistance;
+    private int maxRunDistance;
+    private boolean onDistance;
+
+    public Robot(String model, String color) {
+        this.model = model;
+        this.color = color;
+        this.maxSwimDistance = 5000;
+        this.maxRunDistance = 5000;
+        this.onDistance = true;
+    }
+    @Override
+    public boolean isOnDistance() {
+        return onDistance;
+    }
+    @Override
+    public void setOnDistance(boolean onDistance) {
+    }
+    public void run(int distance) {
+        if (distance <= maxRunDistance) {
+            System.out.println(model + " " + color + " - run OK");
+        } else {
+            System.out.println(model + " " + color + " - run FAILED");
+            onDistance = false;
+        }
+    }
+    @Override
+    public void swim(int distance) {
+        if (distance <= maxSwimDistance) {
+            System.out.println(model + " " + color + " - swim OK");
+        } else {
+            System.out.println(model + " " + color + " - swim FAILED");
+            setOnDistance(false);
+        }
+    }
+    public void info() {
+        System.out.println(model + " " + color + ": " + onDistance);
+    }
+
+}
+package participants;
+
+public interface Swimable {
+    void swim(int distance);
+}
+package participants;
+
+public class Team {
+    private final Participant[] participants;
+    public Team(Participant... participants) { this.participants = participants; }
+    public Participant[] getParticipants() { return participants; }
+    public void showResults() {
+        System.out.println("RESULTS:");
+        for (Participant p : participants) {
+            System.out.println(p + ": " + p.isOnDistance());
+        }
+    }
+}
+package participants;
+
+public interface Walkable {
+    void run(int distance);
+}
