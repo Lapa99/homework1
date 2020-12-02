@@ -1,0 +1,38 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<String> list = new ArrayList<>(Arrays.asList(
+                "cat", "dog", "bee", "rat", "son",
+                "sun", "bee", "dog", "cat", "dog"));
+        Set<String> set = new TreeSet<>(list);
+        System.out.println(set);
+
+        PhoneBook book = new PhoneBook();
+        book.add("Artem", "8-965-438-55-33");
+        book.add("Artem", "8-945-784-75-31");
+        book.add("Max", "8-945-423-29-32");
+        book.add("Mary", "8-945-987-00-55");
+        book.add("Bob", "8-945-456-12-24");
+        book.get("Artem");
+    }
+}
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Objects;
+
+public class PhoneBook {
+    HashMap<String, HashSet<String>> phoneBook;
+
+    public PhoneBook() {
+        this.phoneBook = new HashMap<>();
+    }
+    public void add(String name, String number) {
+        HashSet<String> book = phoneBook.getOrDefault(name, new HashSet<>());
+        book.add(number);
+        phoneBook.put(name, book);
+    }
+    public void get(String name) {
+        System.out.println("Contact " + name + " / phone number: " + phoneBook.getOrDefault(name, new HashSet<>()));
+    }
+}
