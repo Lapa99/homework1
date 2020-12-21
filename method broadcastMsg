@@ -1,0 +1,11 @@
+public void broadcastMsg(String msg, String name) {
+        for (ClientHandler c : clients) {
+            if(msg.startsWith("/w")) {
+                if(msg.startsWith("/w" + c.getNickname())) {
+                    c.sendMsg(msg);
+                }
+            } else {
+                c.sendMsg(name + " " + msg);
+            }
+        }
+    }
