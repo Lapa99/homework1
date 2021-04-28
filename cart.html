@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+
+<body>
+<h1>Корзина</h1>
+<p th:each="product : ${products}" th:text="${product.id}" />
+<button href="index.html">Назад</button>
+</body>
+</html>
